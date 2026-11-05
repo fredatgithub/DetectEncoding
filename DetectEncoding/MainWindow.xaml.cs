@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Reflection;
 using System.Windows;
 using Microsoft.Win32;
 
@@ -12,6 +13,13 @@ namespace DetectEncoding
     public MainWindow()
     {
       InitializeComponent();
+      AddVersionToTitle();
+    }
+
+    private void AddVersionToTitle()
+    {
+      var version = Assembly.GetExecutingAssembly().GetName().Version;
+      Title += $" v{version}";
     }
 
     private async void BtnDetecter_Click(

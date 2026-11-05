@@ -29,19 +29,27 @@ namespace DetectEncodingNet48
           SaveWindowBounds();
         }
       };
+
       Loaded += (sender, args) =>
       {
         if (_wasMaximized)
+        {
           WindowState = WindowState.Maximized;
+        }
+
         _isLoaded = true;
       };
+
       RestoreWindowBounds();
       Closing += (sender, args) =>
       {
         _isClosing = true;
         if (WindowState != WindowState.Minimized)
+        {
           _wasMaximized = WindowState == WindowState.Maximized;
+        }
       };
+
       Closed += (sender, args) => SaveWindowBounds();
     }
 
@@ -55,7 +63,9 @@ namespace DetectEncodingNet48
       try
       {
         if (!File.Exists(WindowBoundsPath))
+        {
           return;
+        }
 
         WindowBounds bounds;
         var serializer = new XmlSerializer(typeof(WindowBounds));
@@ -63,7 +73,9 @@ namespace DetectEncodingNet48
           bounds = (WindowBounds)serializer.Deserialize(stream);
 
         if (!HasValidBounds(bounds))
+        {
           throw new InvalidDataException("Les dimensions enregistrées sont invalides.");
+        }
 
         var width = Math.Min(bounds.Width, SystemParameters.VirtualScreenWidth);
         var height = Math.Min(bounds.Height, SystemParameters.VirtualScreenHeight);
@@ -86,11 +98,7 @@ namespace DetectEncodingNet48
             exception is InvalidOperationException ||
             exception is InvalidDataException)
         {
-          MessageBox.Show(
-            "Impossible de charger la position de la fenêtre : " + exception.Message,
-            "Paramètres de fenêtre",
-            MessageBoxButton.OK,
-            MessageBoxImage.Warning);
+          MessageBox.Show("Impossible de charger la position de la fenêtre : " + exception.Message, "Paramètres de fenêtre", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         else
         {
@@ -103,7 +111,9 @@ namespace DetectEncodingNet48
     {
       var bounds = RestoreBounds;
       if (!_isLoaded || !HasValidBounds(bounds))
+      {
         return;
+      }
 
       try
       {
@@ -124,11 +134,7 @@ namespace DetectEncodingNet48
       {
         if (exception is IOException || exception is UnauthorizedAccessException)
         {
-          MessageBox.Show(
-            "Impossible d'enregistrer la position de la fenêtre : " + exception.Message,
-            "Paramètres de fenêtre",
-            MessageBoxButton.OK,
-            MessageBoxImage.Warning);
+          MessageBox.Show("Impossible d'enregistrer la position de la fenêtre : " + exception.Message, "Paramètres de fenêtre", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         else
         {
@@ -171,16 +177,7 @@ namespace DetectEncodingNet48
     private void AddVersionToTitle()
     {
       var version = Assembly.GetExecutingAssembly().GetName().Version;
-      Title += " v" + version;
-    }
-
-    public class WindowBounds
-    {
-      public double Left { get; set; }
-      public double Top { get; set; }
-      public double Width { get; set; }
-      public double Height { get; set; }
-      public bool IsMaximized { get; set; }
+      Title += " V" + version;
     }
 
     private async void BtnDetecter_Click(object sender, RoutedEventArgs e)
@@ -191,7 +188,9 @@ namespace DetectEncodingNet48
       };
 
       if (dialog.ShowDialog() != true)
+      {
         return;
+      }
 
       string path = dialog.FileName;
       TxtFichier.Text = path;
@@ -204,8 +203,8 @@ namespace DetectEncodingNet48
           "Confiance : {0:P1} | BOM : {1}",
           result.Confidence,
           result.HasBom ? "Oui" : "Non");
-        TxtContenu.Text = await Task.Run(
-          () => File.ReadAllText(path, result.Encoding));
+
+        TxtContenu.Text = await Task.Run(() => File.ReadAllText(path, result.Encoding));
       }
       catch (Exception exception)
       {

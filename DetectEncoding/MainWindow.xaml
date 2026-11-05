@@ -6,32 +6,37 @@
         xmlns:local="clr-namespace:DetectEncoding"
         mc:Ignorable="d"
         Title="Detect Encoding" Height="450" Width="800">
-    <Grid>
-    <StackPanel Margin="20">
+  <Grid Margin="20">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
 
-      <Button Content="Sélectionner un fichier"
+    <Button Grid.Row="0"
+                Content="Sélectionner un fichier"
                 Height="35"
                 Click="BtnDetecter_Click"/>
 
-      <TextBlock x:Name="TxtFichier"
+    <TextBlock Grid.Row="1"
+                   x:Name="TxtFichier"
                    Margin="0,20,0,10"
                    TextWrapping="Wrap"/>
 
-      <TextBlock x:Name="TxtEncodage"
+    <TextBlock Grid.Row="2"
+                   x:Name="TxtEncodage"
                    FontSize="16"
                    FontWeight="Bold"/>
+    <TextBlock Grid.Row="3" x:Name="TxtConfiance" Margin="0,20,0,0"/>
 
-      <TextBlock x:Name="TxtConfiance"
-                   Margin="0,10,0,0"/>
-
-      <TextBox x:Name="TxtContenu"
+    <TextBox Grid.Row="4"
+                 x:Name="TxtContenu"
                  Margin="0,20,0,0"
-                 Height="90"
                  IsReadOnly="True"
                  TextWrapping="Wrap"
-                 VerticalScrollBarVisibility="Auto"/>
-
-    </StackPanel>
+                 VerticalScrollBarVisibility="Auto"
+                 HorizontalScrollBarVisibility="Auto"/>
 
   </Grid>
 </Window>

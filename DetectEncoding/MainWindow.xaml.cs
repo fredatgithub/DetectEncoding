@@ -32,28 +32,18 @@ namespace DetectEncoding
       try
       {
         // Détection en arrière-plan
-        var result = await Task.Run(
-            () => EncodingDetector.DetectFile(path));
+        var result = await Task.Run(() => EncodingDetector.DetectFile(path));
 
-        TxtEncodage.Text =
-            $"Encodage : {result.EncodingName}";
+        TxtEncodage.Text = $"Encodage : {result.EncodingName}";
 
-        TxtConfiance.Text =
-            $"Confiance : {result.Confidence:P1} | " +
-            $"BOM : {(result.HasBom ? "Oui" : "Non")}";
+        TxtConfiance.Text = $"Confiance : {result.Confidence:P1} | " + $"BOM : {(result.HasBom ? "Oui" : "Non")}";
 
         // Lecture avec l'encodage détecté
-        TxtContenu.Text =
-            await File.ReadAllTextAsync(
-                path, result.Encoding);
+        TxtContenu.Text = await File.ReadAllTextAsync(path, result.Encoding);
       }
-      catch (System.Exception ex)
+      catch (Exception exception)
       {
-        MessageBox.Show(
-            ex.Message,
-            "Erreur",
-            MessageBoxButton.OK,
-            MessageBoxImage.Error);
+        MessageBox.Show(exception.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
       }
     }
   }

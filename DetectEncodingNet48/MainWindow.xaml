@@ -6,7 +6,40 @@
         xmlns:local="clr-namespace:DetectEncodingNet48"
         mc:Ignorable="d"
         Title="Detect Encoding for .NET Framework 4.8" Height="450" Width="800">
-    <Grid>
-        
+    <Grid Margin="20">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+
+      <Button Grid.Row="0"
+              Content="Sélectionner un fichier"
+              Height="35"
+              Click="BtnDetecter_Click"/>
+
+      <TextBlock Grid.Row="1"
+                 x:Name="TxtFichier"
+                 Margin="0,20,0,10"
+                 TextWrapping="Wrap"/>
+
+      <TextBlock Grid.Row="2"
+                 x:Name="TxtEncodage"
+                 FontSize="16"
+                 FontWeight="Bold"/>
+
+      <TextBlock Grid.Row="3"
+                 x:Name="TxtConfiance"
+                 Margin="0,20,0,0"/>
+
+      <TextBox Grid.Row="4"
+               x:Name="TxtContenu"
+               Margin="0,20,0,0"
+               IsReadOnly="True"
+               TextWrapping="Wrap"
+               VerticalScrollBarVisibility="Auto"
+               HorizontalScrollBarVisibility="Auto"/>
     </Grid>
 </Window>

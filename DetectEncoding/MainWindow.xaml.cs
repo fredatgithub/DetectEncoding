@@ -26,11 +26,13 @@ namespace DetectEncoding
           SaveWindowBounds();
         }
       };
+      
       Loaded += (_, _) =>
       {
         if (_wasMaximized)
           WindowState = WindowState.Maximized;
       };
+
       RestoreWindowBounds();
       Closing += (_, _) =>
       {
@@ -38,21 +40,22 @@ namespace DetectEncoding
         if (WindowState != WindowState.Minimized)
           _wasMaximized = WindowState == WindowState.Maximized;
       };
+      
       Closed += (_, _) => SaveWindowBounds();
     }
 
-    private static string WindowBoundsPath =>
-      Path.Combine(AppContext.BaseDirectory, "window-bounds.json");
+    private static string WindowBoundsPath => Path.Combine(AppContext.BaseDirectory, "window-bounds.json");
 
     private void RestoreWindowBounds()
     {
       try
       {
         if (!File.Exists(WindowBoundsPath))
+        {
           return;
+        }
 
-        var bounds = JsonSerializer.Deserialize<WindowBounds>(
-          File.ReadAllText(WindowBoundsPath));
+        var bounds = JsonSerializer.Deserialize<WindowBounds>(File.ReadAllText(WindowBoundsPath));
 
         if (bounds is null ||
             !double.IsFinite(bounds.Left) ||
@@ -82,11 +85,7 @@ namespace DetectEncoding
       catch (Exception exception) when (
         exception is IOException or UnauthorizedAccessException or JsonException)
       {
-        MessageBox.Show(
-          $"Impossible de charger la position de la fenêtre : {exception.Message}",
-          "Paramètres de fenêtre",
-          MessageBoxButton.OK,
-          MessageBoxImage.Warning);
+        MessageBox.Show($"Impossible de charger la position de la fenêtre : {exception.Message}", "Paramètres de fenêtre", MessageBoxButton.OK, MessageBoxImage.Warning);
       }
     }
 
@@ -95,8 +94,7 @@ namespace DetectEncoding
       var bounds = RestoreBounds;
       try
       {
-        var directory = Path.GetDirectoryName(WindowBoundsPath)
-          ?? throw new InvalidOperationException("Le dossier des paramètres est introuvable.");
+        var directory = Path.GetDirectoryName(WindowBoundsPath) ?? throw new InvalidOperationException("Le dossier des paramètres est introuvable.");
         Directory.CreateDirectory(directory);
         File.WriteAllText(WindowBoundsPath, JsonSerializer.Serialize(
           new WindowBounds(
@@ -109,11 +107,7 @@ namespace DetectEncoding
       catch (Exception exception) when (
         exception is IOException or UnauthorizedAccessException)
       {
-        MessageBox.Show(
-          $"Impossible d'enregistrer la position de la fenêtre : {exception.Message}",
-          "Paramètres de fenêtre",
-          MessageBoxButton.OK,
-          MessageBoxImage.Warning);
+        MessageBox.Show($"Impossible d'enregistrer la position de la fenêtre : {exception.Message}", "Paramètres de fenêtre", MessageBoxButton.OK, MessageBoxImage.Warning);
       }
     }
 
@@ -130,8 +124,7 @@ namespace DetectEncoding
       double Height,
       bool IsMaximized = false);
 
-    private async void BtnDetecter_Click(
-           object sender, RoutedEventArgs e)
+    private async void BtnDetecter_Click(object sender, RoutedEventArgs e)
     {
       var dialog = new OpenFileDialog
       {
@@ -139,7 +132,9 @@ namespace DetectEncoding
       };
 
       if (dialog.ShowDialog() != true)
+      {
         return;
+      }
 
       string path = dialog.FileName;
 
